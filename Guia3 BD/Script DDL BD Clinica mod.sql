@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS clinica;
 CREATE DATABASE IF NOT EXISTS clinica;
 USE clinica ;
 
-CREATE TABLE IF NOT EXISTS Departamentos(
+CREATE TABLE IF NOT EXISTS departamentos(
   idDepartamento CHAR(2) NOT NULL UNIQUE,
   departamento VARCHAR(25) NOT NULL,
   pais VARCHAR(25) NOT NULL,
@@ -10,63 +10,63 @@ CREATE TABLE IF NOT EXISTS Departamentos(
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS Municipios(
+CREATE TABLE IF NOT EXISTS municipios(
   idMunicipio CHAR(3) NOT NULL UNIQUE,
-  Municipio VARCHAR(50) NOT NULL,
+  municipio VARCHAR(50) NOT NULL,
   idDepartamento CHAR(2) NOT NULL,
   PRIMARY KEY (idMunicipio),
     FOREIGN KEY (idDepartamento)
-    REFERENCES Departamentos (idDepartamento)
+    REFERENCES departamentos (idDepartamento)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS Distritos (
+CREATE TABLE IF NOT EXISTS distritos (
   idDistrito CHAR(5) NOT NULL UNIQUE,
   distrito VARCHAR(50) NOT NULL,
   idMunicipio CHAR(3) NOT NULL,
   PRIMARY KEY (idDistrito),
     FOREIGN KEY (idMunicipio)
-    REFERENCES Municipios (idMunicipio)
+    REFERENCES municipios (idMunicipio)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS Direcciones (
+CREATE TABLE IF NOT EXISTS direcciones (
   idDireccion INT NOT NULL AUTO_INCREMENT,
-  Linea1 VARCHAR(100) NULL,
-  Linea2 VARCHAR(100) NULL,
-  codigoPostal VARCHAR(5) NULL,
+  linea1 VARCHAR(100) ,
+  linea2 VARCHAR(100) ,
+  codigoPostal VARCHAR(5) ,
   idDistrito CHAR(5) NOT NULL,
   PRIMARY KEY (idDireccion),
     FOREIGN KEY (idDistrito)
-    REFERENCES Distritos (idDistrito)
+    REFERENCES distritos (idDistrito)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS Pacientes (
+CREATE TABLE IF NOT EXISTS pacientes (
   idPaciente INT NOT NULL AUTO_INCREMENT,
   nombrePaciente VARCHAR(45) NOT NULL,
   apellidoPaciente VARCHAR(45) NOT NULL,
   generoPaciente VARCHAR(45) NOT NULL,
-  fechaNacPaciente VARCHAR(45) NULL,
-  emailPaciente VARCHAR(45) NULL,
+  fechaNacPaciente VARCHAR(45) ,
+  emailPaciente VARCHAR(45) ,
   duiPaciente VARCHAR(45) NOT NULL,
-  ocupacionPaciente VARCHAR(45) NULL,
-  estadoCivil VARCHAR(45) NULL,
+  ocupacionPaciente VARCHAR(45) ,
+  estadoCivil VARCHAR(45) ,
   idDireccion INT NOT NULL,
   PRIMARY KEY (idPaciente),
     FOREIGN KEY (idDireccion)
-    REFERENCES Direcciones (idDireccion)
+    REFERENCES direcciones (idDireccion)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS Cargos (
+CREATE TABLE IF NOT EXISTS cargos (
   idTipoCargo INT NOT NULL AUTO_INCREMENT,
-  TipoCargo VARCHAR(45) NOT NULL,
+  tipoCargo VARCHAR(45) NOT NULL,
   PRIMARY KEY (idTipoCargo)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS Empleados (
+CREATE TABLE IF NOT EXISTS empleados (
   idEmpleado INT NOT NULL AUTO_INCREMENT,
   nombreEmpleado VARCHAR(45) NOT NULL,
   apellidoEmpleado VARCHAR(45) NOT NULL,
@@ -78,50 +78,50 @@ CREATE TABLE IF NOT EXISTS Empleados (
   idTipoCargo INT NOT NULL,
   PRIMARY KEY (idEmpleado),
     FOREIGN KEY (idDireccion)
-    REFERENCES Direcciones (idDireccion),
+    REFERENCES direcciones (idDireccion),
     FOREIGN KEY (idTipoCargo)
-    REFERENCES Cargos (idTipoCargo)
+    REFERENCES cargos (idTipoCargo)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS Doctores (
+CREATE TABLE IF NOT EXISTS doctores (
   idDoctor INT NOT NULL AUTO_INCREMENT,
-  idEmpleados INT NOT NULL,
+  idEmpleado INT NOT NULL,
   JVPM INT NOT NULL,
   PRIMARY KEY (idDoctor),
-    FOREIGN KEY (idEmpleados)
-    REFERENCES Empleados (idEmpleado)
+    FOREIGN KEY (idEmpleado)
+    REFERENCES empleados (idEmpleado)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS Especialidades (
+CREATE TABLE IF NOT EXISTS especialidades (
   idEspecialidad INT NOT NULL AUTO_INCREMENT,
   nombreEspecialidad VARCHAR(45) NOT NULL,
   PRIMARY KEY (idEspecialidad)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS TipoCitas(
+CREATE TABLE IF NOT EXISTS tiposCitas(
   idTipoCita INT NOT NULL AUTO_INCREMENT,
   tipoCita VARCHAR(45) NOT NULL,
   PRIMARY KEY (idTipoCita)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS Citas (
+CREATE TABLE IF NOT EXISTS citas (
   idCita INT NOT NULL AUTO_INCREMENT,
   fechaHoraCita DATETIME(6) NOT NULL,
   idPaciente INT NOT NULL,
   idTipoCita INT NOT NULL,
   PRIMARY KEY (idCita),
     FOREIGN KEY (idPaciente)
-    REFERENCES Pacientes (idPaciente),
+    REFERENCES pacientes (idPaciente),
     FOREIGN KEY (idTipoCita)
-    REFERENCES TipoCitas (idTipoCita)
+    REFERENCES tiposCitas (idTipoCita)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS Consultorios (
+CREATE TABLE IF NOT EXISTS consultorios (
   idConsultorio INT NOT NULL AUTO_INCREMENT,
   nombreConsultorio VARCHAR(45) NOT NULL,
   seccionConsultorio VARCHAR(45) NOT NULL,
@@ -130,7 +130,7 @@ CREATE TABLE IF NOT EXISTS Consultorios (
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS TiposConsultas (
+CREATE TABLE IF NOT EXISTS tiposConsultas (
   idTipoConsulta INT NOT NULL AUTO_INCREMENT,
   tipoConsulta VARCHAR(45) NOT NULL,
   precioConsulta DECIMAL(6,2) NOT NULL,
@@ -138,16 +138,16 @@ CREATE TABLE IF NOT EXISTS TiposConsultas (
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS ExamenesFisicos (
+CREATE TABLE IF NOT EXISTS examenesFisicos (
   idExamenFisico INT NOT NULL AUTO_INCREMENT,
   pulso VARCHAR(45) NOT NULL,
   presionArterial VARCHAR(45) NOT NULL,
   temperatura VARCHAR(45) NOT NULL,
   estadoPiel VARCHAR(45) NOT NULL,
   comportamiento VARCHAR(45) NOT NULL,
-  inspeccionOjos VARCHAR(45) NULL,
-  inspeccionOidos VARCHAR(45) NULL,
-  inspeccionCabeza VARCHAR(45) NULL,
+  inspeccionOjos VARCHAR(45) ,
+  inspeccionOidos VARCHAR(45) ,
+  inspeccionCabeza VARCHAR(45) ,
   inspeccionAbdomen VARCHAR(45) NOT NULL,
   inspeccionExtremidades VARCHAR(45) NOT NULL,
   funcionSensorial VARCHAR(45) NOT NULL,
@@ -155,57 +155,57 @@ CREATE TABLE IF NOT EXISTS ExamenesFisicos (
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS Recetas (
-  idrecetas INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS recetas (
+  idReceta INT NOT NULL AUTO_INCREMENT,
   fechaReceta DATE NOT NULL,
   duracionReceta INT NOT NULL,
-  PRIMARY KEY (idrecetas)
+  PRIMARY KEY (idReceta)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS Expediente (
+CREATE TABLE IF NOT EXISTS expediente (
   idExpediente INT NOT NULL AUTO_INCREMENT,
-  padecimiento LONGTEXT NULL,
-  alergias LONGTEXT NULL,
-  tratamientos LONGTEXT NULL,
-  notasAdicionales VARCHAR(45) NULL,
+  padecimiento LONGTEXT ,
+  alergia LONGTEXT ,
+  tratamiento LONGTEXT ,
+  notaAdicional VARCHAR(100) ,
   idPaciente INT NOT NULL,
   PRIMARY KEY (idExpediente),
     FOREIGN KEY (idPaciente)
-    REFERENCES Pacientes (idPaciente)
+    REFERENCES pacientes (idPaciente)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS Consultas (
+CREATE TABLE IF NOT EXISTS consultas (
   idConsulta INT NOT NULL UNIQUE AUTO_INCREMENT,
-  DiagnosticoConsulta VARCHAR(255) NOT NULL,
-  EstadoConsulta ENUM('finalizada', 'pendiente', 'cancelada') NOT NULL,
-  idTipoConsultas INT NOT NULL,
+  diagnosticoConsulta VARCHAR(255) NOT NULL,
+  estadoConsulta ENUM('Finalizada', 'Pendiente', 'Cancelada') NOT NULL,
+  idTipoConsulta INT NOT NULL,
   idExamenFisico INT NOT NULL,
   idDoctor INT NOT NULL,
-  idRecetas INT NOT NULL,
+  idReceta INT NOT NULL,
   idCita INT NOT NULL,
   idConsultorio INT NOT NULL,
   idExpediente INT NOT NULL,
   PRIMARY KEY (idConsulta),
-    FOREIGN KEY (idTipoConsultas)
-    REFERENCES TiposConsultas (idTipoConsulta),
+    FOREIGN KEY (idTipoConsulta)
+    REFERENCES tiposConsultas (idTipoConsulta),
     FOREIGN KEY (idExamenFisico)
-    REFERENCES ExamenesFisicos (idExamenFisico),
+    REFERENCES examenesFisicos (idExamenFisico),
     FOREIGN KEY (idDoctor)
-    REFERENCES Doctores(idDoctor),
-    FOREIGN KEY (idrecetas)
-    REFERENCES Recetas (idrecetas),
+    REFERENCES doctores(idDoctor),
+    FOREIGN KEY (idReceta)
+    REFERENCES recetas (idReceta),
     FOREIGN KEY (idCita)
-    REFERENCES Citas (idCita),
+    REFERENCES citas (idCita),
     FOREIGN KEY (idConsultorio)
-    REFERENCES Consultorios (idConsultorio),
+    REFERENCES consultorios (idConsultorio),
     FOREIGN KEY (idExpediente)
-    REFERENCES Expediente (idExpediente)
+    REFERENCES expediente (idExpediente)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS TiposProcedimientos (
+CREATE TABLE IF NOT EXISTS tiposProcedimientos (
   idTipoProcedimiento INT NOT NULL AUTO_INCREMENT,
   tipoProcedimiento VARCHAR(45) NOT NULL UNIQUE,
   descripcionProcedimiento VARCHAR(300) NOT NULL,
@@ -213,7 +213,7 @@ CREATE TABLE IF NOT EXISTS TiposProcedimientos (
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS ProcedimientosMedicos (
+CREATE TABLE IF NOT EXISTS procedimientosMedicos (
   idProcedimiento INT NOT NULL UNIQUE AUTO_INCREMENT,
   fechaHoraProcedimiento DATETIME(6) NOT NULL,
   duracion TIME NOT NULL,
@@ -221,45 +221,45 @@ CREATE TABLE IF NOT EXISTS ProcedimientosMedicos (
   idConsulta INT NOT NULL,
   PRIMARY KEY (idProcedimiento),
     FOREIGN KEY (idTipoProcedimiento)
-    REFERENCES TiposProcedimientos (idTipoProcedimiento),
+    REFERENCES tiposProcedimientos (idTipoProcedimiento),
     FOREIGN KEY (idConsulta)
-    REFERENCES Consultas (idConsulta)
+    REFERENCES consultas (idConsulta)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS DoctorEspecialidades (
+CREATE TABLE IF NOT EXISTS doctorEspecialidades (
   idDoctor INT NOT NULL ,
   idEspecialidad INT NOT NULL,
   PRIMARY KEY (idDoctor, idEspecialidad),
     FOREIGN KEY (idDoctor)
-    REFERENCES Doctores (idDoctor),
+    REFERENCES doctores (idDoctor),
     FOREIGN KEY (idEspecialidad)
-    REFERENCES Especialidades (idEspecialidad)
+    REFERENCES especialidades (idEspecialidad)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS Laboratorista (
+CREATE TABLE IF NOT EXISTS laboratorista (
   idLaboratorista INT NOT NULL AUTO_INCREMENT,
-  idEmpleados INT NOT NULL,
+  idEmpleado INT NOT NULL,
   JVPLC INT NOT NULL,
   PRIMARY KEY (idLaboratorista),
-    FOREIGN KEY (idEmpleados)
-    REFERENCES Empleados (idEmpleado)
+    FOREIGN KEY (idEmpleado)
+    REFERENCES empleados (idEmpleado)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS EspecialidadLaboratorista (
+CREATE TABLE IF NOT EXISTS especialidadesLaboratorista (
   idLaboratorista INT NOT NULL ,
   idEspecialidad INT NOT NULL ,
   PRIMARY KEY (idLaboratorista, idEspecialidad),
     FOREIGN KEY (idLaboratorista)
-    REFERENCES Laboratorista (idLaboratorista),
+    REFERENCES laboratorista (idLaboratorista),
     FOREIGN KEY (idEspecialidad)
-    REFERENCES Especialidades (idEspecialidad)
+    REFERENCES especialidades (idEspecialidad)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS TipoExamenes (
+CREATE TABLE IF NOT EXISTS tiposExamenes (
   idTipoExamen INT NOT NULL AUTO_INCREMENT,
   TipoExamen VARCHAR(45) NOT NULL UNIQUE,
   descripcionExamen VARCHAR(300) NOT NULL,
@@ -267,69 +267,69 @@ CREATE TABLE IF NOT EXISTS TipoExamenes (
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS Examenes (
+CREATE TABLE IF NOT EXISTS examenes (
   idExamen INT NOT NULL AUTO_INCREMENT,
   fechaHoraExamen DATETIME(6) NOT NULL,
   muestraBiologica VARCHAR(45) NOT NULL,
-  unidadesMedida VARCHAR(5) NOT NULL,
+  unidadMedida VARCHAR(5) NOT NULL,
   idTipoExamen INT NOT NULL,
   idLaboratorista INT NOT NULL,
   idCita INT NOT NULL,
   PRIMARY KEY (idExamen),
     FOREIGN KEY (idTipoExamen)
-    REFERENCES TipoExamenes(idTipoExamen),
+    REFERENCES tiposExamenes(idTipoExamen),
     FOREIGN KEY (idLaboratorista)
-    REFERENCES Laboratorista (idLaboratorista),
+    REFERENCES laboratorista (idLaboratorista),
     FOREIGN KEY (idCita)
-    REFERENCES Citas (idCita)
+    REFERENCES citas (idCita)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS TiposMedicamentos (
+CREATE TABLE IF NOT EXISTS tiposMedicamentos (
   idTipoMedicamento INT NOT NULL AUTO_INCREMENT,
-  TipoMedicamento VARCHAR(45) NOT NULL UNIQUE,
+  tipoMedicamento VARCHAR(45) NOT NULL UNIQUE,
   PRIMARY KEY (idTipoMedicamento)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS Laboratorios (
+CREATE TABLE IF NOT EXISTS laboratorios (
   idLaboratorio INT NOT NULL AUTO_INCREMENT,
   nombreLaboratorio VARCHAR(45) NOT NULL,
   PRIMARY KEY (idLaboratorio)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS Medicamentos (
-  idMedicamentos INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS medicamentos (
+  idMedicamento INT NOT NULL AUTO_INCREMENT,
   nombreMedicamento VARCHAR(45) NOT NULL,
   formulaActiva VARCHAR(50) NOT NULL,
   idTipoMedicamento INT NOT NULL,
   idLaboratorio INT NOT NULL,
-  PRIMARY KEY (idMedicamentos),
+  PRIMARY KEY (idMedicamento),
     FOREIGN KEY (idTipoMedicamento)
-    REFERENCES TiposMedicamentos (idTipoMedicamento),
+    REFERENCES tiposMedicamentos (idTipoMedicamento),
     FOREIGN KEY (idLaboratorio)
-    REFERENCES Laboratorios (idLaboratorio)
+    REFERENCES laboratorios (idLaboratorio)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS TipoEquipoMedico (
+CREATE TABLE IF NOT EXISTS tiposEquiposMedicos (
   idTipoEquipoMedico INT NOT NULL AUTO_INCREMENT,
   tipoEquipoMedico VARCHAR(45) NOT NULL UNIQUE,
   PRIMARY KEY (idTipoEquipoMedico)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS Proveedores (
-  idproveedores INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS proveedores (
+  idProveedor INT NOT NULL AUTO_INCREMENT,
   nombre VARCHAR(45) NOT NULL,
   direccion VARCHAR(45) NOT NULL,
   telefono VARCHAR(45) NOT NULL,
-  PRIMARY KEY (idproveedores)
+  PRIMARY KEY (idProveedor)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS Inventario (
+CREATE TABLE IF NOT EXISTS inventario (
   idInventario INT NOT NULL AUTO_INCREMENT,
   bodega VARCHAR(45) NOT NULL,
   seccion VARCHAR(45) NOT NULL,
@@ -339,134 +339,148 @@ CREATE TABLE IF NOT EXISTS Inventario (
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS EquiposMedicos (
+CREATE TABLE IF NOT EXISTS equiposMedicos (
   idEquipoMedico INT NOT NULL AUTO_INCREMENT,
   nombreEquipo VARCHAR(45) NOT NULL,
-  marcaEquipo VARCHAR(45) NULL,
+  marcaEquipo VARCHAR(45) ,
   fechaAdquision DATE NOT NULL,
   idTipoEquipoMedico INT NOT NULL,
-  idProveedores INT NOT NULL,
+  idProveedor INT NOT NULL,
   idInventario INT NOT NULL,
   cantidad INT NOT NULL,
   PRIMARY KEY (idEquipoMedico),
     FOREIGN KEY (idTipoEquipoMedico)
-    REFERENCES TipoEquipoMedico (idTipoEquipoMedico),
-    FOREIGN KEY (idProveedores)
-    REFERENCES Proveedores (idproveedores),
+    REFERENCES tiposEquiposMedicos (idTipoEquipoMedico),
+    FOREIGN KEY (idProveedor)
+    REFERENCES proveedores (idProveedor),
     FOREIGN KEY (idInventario)
-    REFERENCES Inventario (idInventario)
+    REFERENCES inventario (idInventario)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS MedicamentosRecetados (
-  idMedicamentos INT NOT NULL,
-  idrecetas INT NOT NULL,
+CREATE TABLE IF NOT EXISTS medicamentosRecetados (
+  idMedicamento INT NOT NULL,
+  idReceta INT NOT NULL,
   dosis VARCHAR(200) NOT NULL,
-  PRIMARY KEY (idMedicamentos, idrecetas),
-    FOREIGN KEY (idMedicamentos)
-    REFERENCES Medicamentos (idMedicamentos),
-    FOREIGN KEY (idrecetas)
-    REFERENCES Recetas (idrecetas)
+  PRIMARY KEY (idMedicamento, idReceta),
+    FOREIGN KEY (idMedicamento)
+    REFERENCES medicamentos (idMedicamento),
+    FOREIGN KEY (idReceta)
+    REFERENCES recetas (idReceta)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS Enfermeros (
-  idEnfermeros INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS enfermeros (
+  idEnfermero INT NOT NULL AUTO_INCREMENT,
   idEmpleado INT NOT NULL,
   JVPE INT NOT NULL,
-  PRIMARY KEY (idEnfermeros),
+  PRIMARY KEY (idEnfermero),
     FOREIGN KEY (idEmpleado)
-    REFERENCES Empleados (idEmpleado)
+    REFERENCES empleados (idEmpleado)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS PersonalProcedimientos (
-  idPersonalProcedimientos INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS personalProcedimientos (
+  idPersonalProcedimiento INT NOT NULL AUTO_INCREMENT,
   idEnfermero INT NOT NULL,
   idDoctor INT NOT NULL,
   idProcedimiento INT NOT NULL,
-  PRIMARY KEY (idPersonalProcedimientos),
+  PRIMARY KEY (idPersonalProcedimiento),
     FOREIGN KEY (idEnfermero)
-    REFERENCES Enfermeros (idEnfermeros),
+    REFERENCES enfermeros (idEnfermero),
     FOREIGN KEY (idDoctor)
-    REFERENCES Doctores (idDoctor),
+    REFERENCES doctores (idDoctor),
     FOREIGN KEY (idProcedimiento)
-    REFERENCES ProcedimientosMedicos (idProcedimiento)
+    REFERENCES procedimientosMedicos (idProcedimiento)
 )ENGINE = InnoDB;
 
+CREATE TABLE IF NOT EXISTS tiposPago(
+	idTipoPago INT NOT NULL AUTO_INCREMENT,
+    tipoPago VARCHAR(50) NOT NULL,
+    PRIMARY KEY (idTipoPago)
+)Engine = InnoDB;
 
-CREATE TABLE IF NOT EXISTS FacturaConsulta (
+CREATE TABLE IF NOT EXISTS facturasConsultas (
   idFacturaConsulta INT NOT NULL AUTO_INCREMENT,
   idConsulta INT NOT NULL,
   idPaciente INT NOT NULL,
   fecha DATE NOT NULL,
   total DECIMAL(6,2) NOT NULL,
+  idTipoPago INT  NOT NULL,
   PRIMARY KEY (idFacturaConsulta),
     FOREIGN KEY (idConsulta)
-    REFERENCES Consultas (idConsulta),
+    REFERENCES consultas (idConsulta),
     FOREIGN KEY (idPaciente)
-    REFERENCES Pacientes (idPaciente)
+    REFERENCES pacientes (idPaciente),
+    FOREIGN KEY (idTipoPago)
+    REFERENCES tiposPago (idTipoPago)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS FacturasExamenes (
-  idFacturaExamenes INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS facturasExamenes (
+  idFacturaExamen INT NOT NULL AUTO_INCREMENT,
   idPaciente INT NOT NULL,
   fechaFE DATETIME(2) NOT NULL,
   totalFE DECIMAL(6,2) NOT NULL,
-  PRIMARY KEY (idFacturaExamenes),
+  idTipoPago INT NOT NULL,
+  PRIMARY KEY (idFacturaExamen),
     FOREIGN KEY (idPaciente)
-    REFERENCES Pacientes (idPaciente)
+    REFERENCES pacientes (idPaciente),
+    FOREIGN KEY (idTipoPago)
+    REFERENCES tiposPago (idTipoPago)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS FacturaProcedimientos (
-  idFacturaProcedimientos INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS facturasProcedimientos (
+  idFacturaProcedimiento INT NOT NULL AUTO_INCREMENT,
   idPaciente INT NOT NULL,
   fechaFP DATETIME(2) NOT NULL,
-  totalFp DECIMAL(6,2) NOT NULL,
-  PRIMARY KEY (idFacturaProcedimientos),
+  totalFP DECIMAL(6,2) NOT NULL,
+  idTipoPago INT NOT NULL,
+  PRIMARY KEY (idFacturaProcedimiento),
     FOREIGN KEY (idPaciente)
-    REFERENCES Pacientes (idPaciente)
+    REFERENCES pacientes (idPaciente),
+    FOREIGN KEY (idTipoPago)
+    REFERENCES tiposPago (idTipoPago)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS DetallesFacturaExamen (
-  idDetallesFacturaExamen INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS detallesFacturasExamenes (
+  idDetalleFacturaExamen INT NOT NULL AUTO_INCREMENT,
   precioUnitario DECIMAL(6,2) NOT NULL,
-  idFacturaProcedimientos INT NOT NULL,
+  idFacturaProcedimiento INT NOT NULL,
   idProcedimiento INT NOT NULL,
-  PRIMARY KEY (idDetallesFacturaExamen),
-    FOREIGN KEY (idFacturaProcedimientos)
-    REFERENCES FacturaProcedimientos (idFacturaProcedimientos),
+  PRIMARY KEY (idDetalleFacturaExamen),
+    FOREIGN KEY (idFacturaProcedimiento)
+    REFERENCES facturasProcedimientos (idFacturaProcedimiento),
     FOREIGN KEY (idProcedimiento)
-    REFERENCES ProcedimientosMedicos(idProcedimiento)
+    REFERENCES procedimientosMedicos(idProcedimiento)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS DetallesFacturaProcedimientos (
-  idDetallesFacturaProcedimientos INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS detallesFacturasProcedimientos (
+  idDetalleFacturaProcedimiento INT NOT NULL AUTO_INCREMENT,
   precioUnitario DECIMAL(6,2) NOT NULL,
-  idFacturaProcedimientos INT NOT NULL,
+  idFacturaProcedimiento INT NOT NULL,
   idProcedimiento INT NOT NULL,
-  PRIMARY KEY (idDetallesFacturaProcedimientos),
-    FOREIGN KEY (idFacturaProcedimientos)
-    REFERENCES FacturaProcedimientos (idFacturaProcedimientos),
+  PRIMARY KEY (idDetalleFacturaProcedimiento),
+    FOREIGN KEY (idFacturaProcedimiento)
+    REFERENCES facturasProcedimientos (idFacturaProcedimiento),
     FOREIGN KEY (idProcedimiento)
-    REFERENCES ProcedimientosMedicos(idProcedimiento)
+    REFERENCES procedimientosMedicos(idProcedimiento)
 )ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS InsumosMedicos (
-  idInsumosMedicos INT NOT NULL AUTO_INCREMENT,
-  idMedicamentos INT NOT NULL,
+CREATE TABLE IF NOT EXISTS insumosMedicos (
+  idInsumoMedico INT NOT NULL AUTO_INCREMENT,
+  idMedicamento INT NOT NULL,
   idEquipoMedico INT NOT NULL,
   idProcedimiento INT NOT NULL,
-  PRIMARY KEY (idInsumosMedicos),
-    FOREIGN KEY (idMedicamentos)
-    REFERENCES Medicamentos (idMedicamentos),
+  PRIMARY KEY (idInsumoMedico),
+    FOREIGN KEY (idMedicamento)
+    REFERENCES medicamentos (idMedicamento),
     FOREIGN KEY (idEquipoMedico)
-    REFERENCES EquiposMedicos (idEquipoMedico),
+    REFERENCES equiposMedicos (idEquipoMedico),
     FOREIGN KEY (idProcedimiento)
-    REFERENCES ProcedimientosMedicos (idProcedimiento)
+    REFERENCES procedimientosMedicos (idProcedimiento)
 )ENGINE = InnoDB;
